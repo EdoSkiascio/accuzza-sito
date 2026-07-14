@@ -9,7 +9,7 @@
      STRIPE_SECRET_KEY  -> la tua chiave segreta Stripe (sk_live_... o sk_test_...)
 
    URL della tua funzione una volta online:
-     https://tuosito.netlify.app/.netlify/functions/create-checkout
+     https://accuzza.netlify.app/.netlify/functions/create-checkout
    ========================================================= */
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);

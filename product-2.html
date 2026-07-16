@@ -32,7 +32,7 @@
     </div>
 
     <div class="product-info">
-      <p class="eyebrow">Accuzza — mini collezione</p>
+      <p class="eyebrow">Accuzza</p>
       <h1>Levante</h1>
       <p class="card-concept" style="margin-bottom:22px">Stampa sul fronte: una bussola ridotta all'essenziale, con la sola indicazione Est in evidenza — il vento che porta l'estate.</p>
 
@@ -45,7 +45,6 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3 L4 7 L7 10 L7 21 L17 21 L17 10 L20 7 L16 3 Q12 6 8 3 Z"/></svg> Vestibilità oversize, relaxed fit</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 C9 3 8 6 9 8 C6 7 4 9 5 12 C3 13 3 16 6 17 C5 20 8 22 11 20 C12 22 15 22 16 20 C19 22 22 20 21 17 C24 16 24 13 22 12 C23 9 21 7 18 8 C19 6 18 3 15 3 C14 5 13 5 12 3 Z"/></svg> 100% cotone</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7 L14 7 L14 17 L3 17 Z"/><path d="M14 10 L18 10 L21 13 L21 17 L14 17"/><circle cx="7" cy="19" r="1.6"/><circle cx="18" cy="19" r="1.6"/></svg> Consegna in 4 giorni in tutta Italia</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12 L20 12 M4 6 L20 6 M4 18 L14 18"/></svg> Stampa solo sul fronte</li>
       </ul>
 
       <span class="size-label">Taglia</span>
@@ -58,11 +57,21 @@
       <input type="hidden" data-selected-size value="">
       <p data-size-warning style="display:none; color:var(--turquoise-d); font-size:0.85rem; margin:-18px 0 20px;">Scegli una taglia prima di continuare.</p>
 
-      <div class="product-actions">
-        <a href="#" class="btn btn-primary btn-block" data-buy-now data-pay-link="https://buy.stripe.com/REPLACE_LEVANTE">Acquista ora</a>
-        <a href="bundle.html?add=levante" class="btn btn-ghost btn-block">Aggiungi al bundle e risparmia sulla spedizione</a>
+      <span class="size-label">Quantità</span>
+      <div class="qty-row">
+        <select data-selected-qty aria-label="Quantità">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
       </div>
-      <p class="product-note">1 maglietta: spedizione €8. Da 3 in su, spedizione gratuita. <a href="bundle.html">Componi il tuo bundle →</a></p>
+
+      <div class="product-actions">
+        <a href="#" class="btn btn-primary btn-block" data-buy-now data-product-id="levante">Acquista ora</a>
+        <a href="bundle.html?add=levante" class="btn btn-ghost btn-block">Aggiungi al carrello</a>
+      </div>
+      <p class="product-note">1 maglietta: spedizione €8 - 2 magliette spedizione €5 - Da 3 in su, spedizione gratuita.</p>
     </div>
   </div>
 
@@ -89,7 +98,6 @@
   <div class="wrap footer-inner">
     <span class="footer-logo">Accuzza</span>
     <span class="footer-meta">© 2026 Accuzza — spedizioni in tutta Italia</span>
-    <a class="footer-ig" href="https://instagram.com/accuzza" target="_blank" rel="noopener">Seguici su Instagram</a>
   </div>
 </footer>
 

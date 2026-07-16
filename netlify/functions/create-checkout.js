@@ -2,14 +2,14 @@
    ACCUZZA — create-checkout.js
    Funzione serverless (Netlify Function).
    Riceve il carrello dal sito (bundle.html o pagina prodotto),
-   calcola la spedizione in base al numero di articoli,
+   calcola la spedizione in base al numero totale di articoli,
    e crea una Stripe Checkout Session.
 
    Variabile d'ambiente richiesta su Netlify:
      STRIPE_SECRET_KEY  -> la tua chiave segreta Stripe (sk_live_... o sk_test_...)
 
    URL della tua funzione una volta online:
-     https://accuzza.netlify.app/.netlify/functions/create-checkout
+     https://tuosito.netlify.app/.netlify/functions/create-checkout
    ========================================================= */
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -17,15 +17,16 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // Stesso prezzo del sito: 20 euro a maglietta (in centesimi per Stripe)
 const PRICE_PER_SHIRT = 2000;
 
-// Stessa regola di spedizione mostrata sul sito
-const SHIPPING_RULES = { 1: 800, 2: 500, 3: 0, 4: 0 }; // in centesimi
+// Stessa regola di spedizione mostrata sul sito (in centesimi)
+const SHIPPING_RULES = { 1: 800, 2: 500, 3: 0 };
 
 function shippingFor(count) {
   if (count <= 0) return 0;
-  return SHIPPING_RULES[Math.min(count, 4)];
+  const tier = Math.min(count, 3);
+  return SHIPPING_RULES[tier];
 }
 
-// Nome leggibile per ogni prodotto (deve combaciare con gli id usati in bundle.html)
+// Nome leggibile per ogni prodotto (deve combaciare con gli id usati nel sito)
 const PRODUCT_NAMES = {
   scoglio: "Accuzza — Scoglio",
   levante: "Accuzza — Levante",
@@ -41,15 +42,15 @@ exports.handler = async (event) => {
   try {
     const { items, successUrl, cancelUrl } = JSON.parse(event.body);
 
-    // items atteso: [{ id: "scoglio", size: "M" }, { id: "levante", size: "L" }, ...]
+    // items atteso: [{ id: "scoglio", size: "M", qty: 2 }, ...]
     if (!Array.isArray(items) || items.length === 0) {
       return { statusCode: 400, body: JSON.stringify({ error: "Carrello vuoto." }) };
     }
 
-    const count = items.length;
+    const count = items.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
     const shippingAmount = shippingFor(count);
 
-    // Un line item per ogni maglietta selezionata (prezzo unico €20 ciascuna)
+    // Un line item per ogni modello/taglia selezionati, con la relativa quantità
     const line_items = items.map((item) => ({
       price_data: {
         currency: "eur",
@@ -58,7 +59,7 @@ exports.handler = async (event) => {
         },
         unit_amount: PRICE_PER_SHIRT,
       },
-      quantity: 1,
+      quantity: Number(item.qty) || 1,
     }));
 
     const session = await stripe.checkout.sessions.create({
@@ -82,11 +83,10 @@ exports.handler = async (event) => {
         },
       ],
       // Codice ordine leggibile: Stripe genera comunque un ID sessione univoco (cs_...),
-      // che puoi usare come riferimento. Se vuoi un formato tipo "ACZ-0001" progressivo,
-      // serve un contatore esterno (es. su un Google Sheet via Zapier, come discusso prima).
-      success_url:
-        successUrl || "https://TUOSITO.netlify.app/grazie.html?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: cancelUrl || "https://TUOSITO.netlify.app/bundle.html",
+      // che puoi usare come riferimento. Per un formato tipo "ACZ-0001" progressivo
+      // serve un contatore esterno (es. Google Sheet via Zapier, come discusso).
+      success_url: successUrl || `${event.headers.origin || ""}/grazie.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${event.headers.origin || ""}/bundle.html`,
     });
 
     return {

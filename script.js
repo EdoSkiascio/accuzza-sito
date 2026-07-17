@@ -166,7 +166,7 @@ function initAddToCart(){
     if (!size) return;
     const productId = btn.dataset.productId;
     const qty = Number(document.querySelector("[data-selected-qty]")?.value || 1);
-    window.location.href = `bundle.html?add=${productId}&qty=${qty}`;
+    window.location.href = `bundle.html?add=${productId}&size=${size}&qty=${qty}`;
   });
 }
 
@@ -243,15 +243,22 @@ function initBundlePage(){
     startCheckoutSession(order.items, checkoutBtn);
   });
 
-  // Preseleziona un prodotto (ed eventualmente la quantità) se si arriva
-  // da una pagina prodotto (?add=scoglio&qty=2)
+  // Preseleziona un prodotto (ed eventualmente taglia/quantità) se si arriva
+  // da una pagina prodotto (?add=scoglio&size=M&qty=2)
   const params = new URLSearchParams(window.location.search);
   const preselect = params.get("add");
+  const preselectSize = params.get("size");
   const preselectQty = params.get("qty");
   if (preselect){
     const row = list.querySelector(`[data-bundle-row="${preselect}"]`);
     if (row){
       row.querySelector(".bundle-check").checked = true;
+      if (preselectSize){
+        const sizeSelect = row.querySelector(".bundle-size-select");
+        if ([...sizeSelect.options].some(o => o.value === preselectSize)){
+          sizeSelect.value = preselectSize;
+        }
+      }
       if (preselectQty){
         const qtyInput = row.querySelector(".bundle-qty");
         const qtyVal = Math.max(1, parseInt(preselectQty, 10) || 1);

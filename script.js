@@ -58,6 +58,40 @@ function initSizeSelector(){
   });
 }
 
+/* ---------------- stepper quantità (- / input / +) ---------------- *
+   Funziona per qualunque numero di stepper presenti nella pagina
+   (una nella pagina prodotto, quattro nel bundle).
+------------------------------------------------------------------- */
+function initQtySteppers(){
+  document.querySelectorAll("[data-qty-decrement], [data-qty-increment]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const wrapper = btn.closest(".qty-stepper");
+      if (!wrapper) return;
+      const input = wrapper.querySelector(".qty-input");
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      val = btn.hasAttribute("data-qty-decrement") ? Math.max(1, val - 1) : val + 1;
+      input.value = val;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  });
+
+  document.querySelectorAll(".qty-input").forEach(input => {
+    // Durante la digitazione: consente solo cifre, ma non forza subito il minimo
+    // (così si può cancellare e riscrivere liberamente da tastiera).
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/[^0-9]/g, "");
+    });
+    // Quando si esce dal campo, si normalizza a un valore valido (minimo 1).
+    input.addEventListener("blur", () => {
+      let val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 1) val = 1;
+      input.value = val;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  });
+}
+
 /* ---------------- checkout Stripe condiviso ---------------- *
    Chiama la Netlify Function che crea la Checkout Session,
    poi reindirizza il cliente alla vera pagina di pagamento Stripe.
@@ -94,6 +128,18 @@ async function startCheckoutSession(items, triggerBtn){
   }
 }
 
+/* ---------------- validazione taglia condivisa ---------------- */
+function requireSizeSelected(){
+  const size = document.querySelector("[data-selected-size]")?.value;
+  if (!size){
+    const warn = document.querySelector("[data-size-warning]");
+    if (warn) warn.style.display = "block";
+    document.querySelector("[data-size-row]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return null;
+  }
+  return size;
+}
+
 /* ---------------- "Acquista ora" nella pagina prodotto ---------------- */
 function initBuyNow(){
   const buyBtn = document.querySelector("[data-buy-now]");
@@ -101,16 +147,26 @@ function initBuyNow(){
 
   buyBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    const size = document.querySelector("[data-selected-size]")?.value;
-    if (!size){
-      const warn = document.querySelector("[data-size-warning]");
-      if (warn) warn.style.display = "block";
-      document.querySelector("[data-size-row]")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
+    const size = requireSizeSelected();
+    if (!size) return;
     const productId = buyBtn.dataset.productId;
     const qty = Number(document.querySelector("[data-selected-qty]")?.value || 1);
     startCheckoutSession([{ id: productId, size, qty }], buyBtn);
+  });
+}
+
+/* ---------------- "Aggiungi al carrello" nella pagina prodotto ---------------- */
+function initAddToCart(){
+  const btn = document.querySelector("[data-add-cart]");
+  if (!btn) return;
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const size = requireSizeSelected();
+    if (!size) return;
+    const productId = btn.dataset.productId;
+    const qty = Number(document.querySelector("[data-selected-qty]")?.value || 1);
+    window.location.href = `bundle.html?add=${productId}&qty=${qty}`;
   });
 }
 
@@ -138,7 +194,7 @@ function initBundlePage(){
       if (checkbox.checked){
         const id = row.dataset.bundleRow;
         const size = row.querySelector(".bundle-size-select").value;
-        const qty = Number(row.querySelector(".bundle-qty").value);
+        const qty = Math.max(1, parseInt(row.querySelector(".bundle-qty").value, 10) || 1);
         const product = ACCUZZA_PRODUCTS.find(p => p.id === id);
         selected.push({ ...product, size, qty });
       }
@@ -187,13 +243,20 @@ function initBundlePage(){
     startCheckoutSession(order.items, checkoutBtn);
   });
 
-  // Preseleziona un prodotto se si arriva da una pagina prodotto (?add=scoglio)
+  // Preseleziona un prodotto (ed eventualmente la quantità) se si arriva
+  // da una pagina prodotto (?add=scoglio&qty=2)
   const params = new URLSearchParams(window.location.search);
   const preselect = params.get("add");
+  const preselectQty = params.get("qty");
   if (preselect){
     const row = list.querySelector(`[data-bundle-row="${preselect}"]`);
     if (row){
       row.querySelector(".bundle-check").checked = true;
+      if (preselectQty){
+        const qtyInput = row.querySelector(".bundle-qty");
+        const qtyVal = Math.max(1, parseInt(preselectQty, 10) || 1);
+        qtyInput.value = qtyVal;
+      }
     }
   }
 
@@ -203,6 +266,8 @@ function initBundlePage(){
 document.addEventListener("DOMContentLoaded", () => {
   initReveal();
   initSizeSelector();
+  initQtySteppers();
   initBuyNow();
+  initAddToCart();
   initBundlePage();
 });

@@ -59,19 +59,18 @@
 
       <span class="size-label">Quantità</span>
       <div class="qty-row">
-        <select data-selected-qty aria-label="Quantità">
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
+        <div class="qty-stepper" data-qty-stepper>
+          <button type="button" class="qty-btn" data-qty-decrement aria-label="Diminuisci quantità">−</button>
+          <input type="number" class="qty-input" data-selected-qty value="1" min="1" inputmode="numeric" aria-label="Quantità">
+          <button type="button" class="qty-btn" data-qty-increment aria-label="Aumenta quantità">+</button>
+        </div>
       </div>
 
       <div class="product-actions">
         <a href="#" class="btn btn-primary btn-block" data-buy-now data-product-id="levante">Acquista ora</a>
-        <a href="bundle.html?add=levante" class="btn btn-ghost btn-block">Aggiungi al carrello</a>
+        <a href="#" class="btn btn-ghost btn-block" data-add-cart data-product-id="levante">Aggiungi al carrello</a>
       </div>
-      <p class="product-note">1 maglietta: spedizione €8 - 2 magliette spedizione €5 - Da 3 in su, spedizione gratuita.</p>
+      <p class="product-note">1 maglietta: spedizione €8 - 2 magliette: spedizione €5 - 3+ magliette: spedizione gratuita.</p>
     </div>
   </div>
 

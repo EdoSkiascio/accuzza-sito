@@ -31,7 +31,7 @@
 
 *, *::before, *::after{ box-sizing: border-box; }
 
-html{ scroll-behavior: smooth; }
+html{ scroll-behavior: smooth; overflow-x: hidden; }
 
 body{
   margin:0;
@@ -40,6 +40,7 @@ body{
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 img, svg{ display:block; max-width:100%; }
@@ -84,10 +85,15 @@ h1,h2,h3{
   align-items:center;
   justify-content:center;
 }
-.header-inner .header-ig,
-.header-inner .back-link{
+.header-inner .header-ig{
   position: absolute;
   right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.header-inner .back-link{
+  position: absolute;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -329,6 +335,23 @@ h1,h2,h3{
   font-size: 1.15rem;
   color: var(--turquoise-d);
   margin: 10px 0 24px;
+}
+
+/* Variante compatta: sempre 3 colonne in riga, usata nel bundle */
+.ship-table.compact{
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 0;
+}
+.ship-table.compact .ship-tier{ padding: 12px 6px; }
+.ship-table.compact .ship-qty{ font-size: 0.6rem; }
+.ship-table.compact .ship-price{ font-size: 1.15rem; margin-top: 4px; }
+.ship-table.compact .ship-note{ font-size: 0.52rem; }
+@media (min-width: 700px){
+  .ship-table.compact .ship-tier{ padding: 18px 12px; }
+  .ship-table.compact .ship-qty{ font-size: 0.68rem; }
+  .ship-table.compact .ship-price{ font-size: 1.4rem; }
+  .ship-table.compact .ship-note{ font-size: 0.6rem; }
 }
 
 /* --------------------- cta finale --------------------- */

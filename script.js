@@ -24,6 +24,42 @@ function shipTierFor(count){
   return Math.min(count, 3);
 }
 
+/* ---------------- persistenza carrello (localStorage) ---------------- *
+   Chiave: accuzza_cart
+   Formato: { scoglio: { checked, size, qty }, levante: {...}, ... }
+   Usato per mantenere lo stato del carrello quando si naviga tra
+   pagina prodotto e pagina bundle (avanti e indietro).
+------------------------------------------------------------------------ */
+const CART_STORAGE_KEY = "accuzza_cart";
+
+const CartStore = {
+  read(){
+    try {
+      const raw = localStorage.getItem(CART_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch (err) {
+      return {};
+    }
+  },
+  write(cart){
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (err) {
+      // localStorage non disponibile (es. modalità privata): il sito
+      // continua a funzionare, semplicemente senza persistenza.
+    }
+  },
+  // Aggiorna (merge) la riga di un singolo prodotto e salva.
+  setItem(productId, data){
+    const cart = CartStore.read();
+    cart[productId] = { ...(cart[productId] || {}), ...data };
+    CartStore.write(cart);
+    return cart;
+  }
+};
+
 /* ---------------- reveal on scroll ---------------- */
 function initReveal(){
   const items = document.querySelectorAll(".reveal");
@@ -166,6 +202,7 @@ function initAddToCart(){
     if (!size) return;
     const productId = btn.dataset.productId;
     const qty = Number(document.querySelector("[data-selected-qty]")?.value || 1);
+    CartStore.setItem(productId, { checked: true, size, qty });
     window.location.href = `bundle.html?add=${productId}&size=${size}&qty=${qty}`;
   });
 }
@@ -188,17 +225,24 @@ function initBundlePage(){
 
   function update(){
     let selected = [];
+    const cart = {};
     rows.forEach(row => {
       const checkbox = row.querySelector(".bundle-check");
       row.classList.toggle("checked", checkbox.checked);
+      const id = row.dataset.bundleRow;
+      const size = row.querySelector(".bundle-size-select").value;
+      const qty = Math.max(1, parseInt(row.querySelector(".bundle-qty").value, 10) || 1);
+
+      // Salva sempre lo stato della riga (anche se non selezionata),
+      // così taglia/quantità restano impostate quando l'utente torna qui.
+      cart[id] = { checked: checkbox.checked, size, qty };
+
       if (checkbox.checked){
-        const id = row.dataset.bundleRow;
-        const size = row.querySelector(".bundle-size-select").value;
-        const qty = Math.max(1, parseInt(row.querySelector(".bundle-qty").value, 10) || 1);
         const product = ACCUZZA_PRODUCTS.find(p => p.id === id);
         selected.push({ ...product, size, qty });
       }
     });
+    CartStore.write(cart);
 
     const count = selected.reduce((sum, p) => sum + p.qty, 0);
     const itemsTotal = selected.reduce((sum, p) => sum + p.price * p.qty, 0);
@@ -231,9 +275,22 @@ function initBundlePage(){
   }
 
   rows.forEach(row => {
-    row.querySelector(".bundle-check").addEventListener("change", update);
-    row.querySelector(".bundle-size-select").addEventListener("change", update);
-    row.querySelector(".bundle-qty").addEventListener("change", update);
+    const checkbox = row.querySelector(".bundle-check");
+    const sizeSelect = row.querySelector(".bundle-size-select");
+    const qtyInput = row.querySelector(".bundle-qty");
+
+    checkbox.addEventListener("change", update);
+
+    // Se l'utente cambia taglia o quantità di una riga non ancora
+    // selezionata, la riga si auto-flagga (checkbox check automatico).
+    sizeSelect.addEventListener("change", () => {
+      if (!checkbox.checked) checkbox.checked = true;
+      update();
+    });
+    qtyInput.addEventListener("change", () => {
+      if (!checkbox.checked) checkbox.checked = true;
+      update();
+    });
   });
 
   checkoutBtn?.addEventListener("click", (e) => {
@@ -243,8 +300,28 @@ function initBundlePage(){
     startCheckoutSession(order.items, checkoutBtn);
   });
 
-  // Preseleziona un prodotto (ed eventualmente taglia/quantità) se si arriva
-  // da una pagina prodotto (?add=scoglio&size=M&qty=2)
+  // 1) Ripristina lo stato salvato in precedenza (localStorage), se presente.
+  const savedCart = CartStore.read();
+  rows.forEach(row => {
+    const id = row.dataset.bundleRow;
+    const saved = savedCart[id];
+    if (!saved) return;
+    const sizeSelect = row.querySelector(".bundle-size-select");
+    const qtyInput = row.querySelector(".bundle-qty");
+    if (saved.size && [...sizeSelect.options].some(o => o.value === saved.size)){
+      sizeSelect.value = saved.size;
+    }
+    if (saved.qty){
+      qtyInput.value = Math.max(1, parseInt(saved.qty, 10) || 1);
+    }
+    if (saved.checked){
+      row.querySelector(".bundle-check").checked = true;
+    }
+  });
+
+  // 2) Applica eventuale preselezione arrivata da una pagina prodotto
+  //    (?add=scoglio&size=M&qty=2) — ha priorità sul dato salvato,
+  //    perché riflette l'azione più recente dell'utente.
   const params = new URLSearchParams(window.location.search);
   const preselect = params.get("add");
   const preselectSize = params.get("size");
@@ -265,6 +342,10 @@ function initBundlePage(){
         qtyInput.value = qtyVal;
       }
     }
+    // Pulisce l'URL per evitare che tornando indietro/avanti si
+    // ri-applichi la stessa preselezione sopra ai dati più recenti.
+    const cleanUrl = window.location.pathname;
+    window.history.replaceState({}, "", cleanUrl);
   }
 
   update();

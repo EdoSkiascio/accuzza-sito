@@ -273,14 +273,20 @@ h1,h2,h3{
 .stamp.lg{ width: 132px; height: 132px; min-width: 132px; }
 .stamp.lg svg{ width: 46px; height: 46px; }
 .stamp.lg .stamp-code{ font-size: 0.62rem; }
+a.stamp{
+  text-decoration:none;
+  cursor:pointer;
+  transition: border-color .15s ease, transform .15s ease;
+}
+a.stamp:hover{ border-color: var(--turquoise-d); transform: scale(1.04); }
 
 /* --------------------- usp band --------------------- */
 .usp-band{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
-@media (min-width: 700px){ .usp-band{ grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 700px){ .usp-band{ gap: 18px; } }
 .usp-item{
   display:flex;
   flex-direction: column;
@@ -288,9 +294,14 @@ h1,h2,h3{
   padding: 18px 4px;
   border-top: 1px solid var(--line);
 }
-.usp-item svg{ width: 26px; height: 26px; color: var(--turquoise-d); }
-.usp-item strong{ color: var(--navy); font-size: 0.98rem; }
-.usp-item span{ font-size: 0.85rem; color: var(--ink); }
+.usp-item svg{ width: 22px; height: 22px; color: var(--turquoise-d); }
+.usp-item strong{ color: var(--navy); font-size: 0.8rem; }
+.usp-item span{ font-size: 0.72rem; color: var(--ink); line-height:1.35; }
+@media (min-width: 700px){
+  .usp-item svg{ width: 26px; height: 26px; }
+  .usp-item strong{ font-size: 0.98rem; }
+  .usp-item span{ font-size: 0.85rem; }
+}
 
 /* --------------------- vantaggio spedizione --------------------- */
 .ship-table{
@@ -520,6 +531,7 @@ h1,h2,h3{
   font-size: 0.82rem;
   color: var(--ink);
   margin-top: 14px;
+  line-height: 1.7;
 }
 .product-note a{ color: var(--turquoise-d); border-bottom: 1px solid currentColor; }
 

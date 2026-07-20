@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il tuo carrello — Accuzza</title>
+<meta name="description" content="Scegli i modelli Accuzza che vuoi e risparmia sulla spedizione: gratuita da 3 magliette in su.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="logo">Accuzza</a>
+    <a class="back-link" href="index.html#collezione">← Collezione</a>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap">
+    <h1 class="hero-title" style="font-size:clamp(2rem,7vw,3.4rem)">Il tuo carrello</h1>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 24px; padding-bottom: 24px;">
+  <div class="wrap">
+    <div class="ship-table compact">
+      <div class="ship-tier" data-ship-tier="1">
+        <div class="ship-qty">1 maglietta</div>
+        <div class="ship-price">€8</div>
+        <div class="ship-note">(costo di spedizione)</div>
+      </div>
+      <div class="ship-tier" data-ship-tier="2">
+        <div class="ship-qty">2 magliette</div>
+        <div class="ship-price">€5</div>
+        <div class="ship-note">(costo di spedizione)</div>
+      </div>
+      <div class="ship-tier" data-ship-tier="3">
+        <div class="ship-qty">3+ magliette</div>
+        <div class="ship-price ship-free">Gratis</div>
+        <div class="ship-note">(costo di spedizione)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="wrap bundle-layout">
+
+    <div class="bundle-list" data-bundle-list>
+
+      <div class="bundle-row" data-bundle-row="scoglio">
+        <input type="checkbox" class="bundle-check" aria-label="Aggiungi Scoglio">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <a class="stamp" href="product-1.html" aria-label="Vai alla pagina Scoglio">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 30 Q10 20 16 26 Q22 16 28 24 Q32 19 36 26"/></svg>
+          </a>
+          <div>
+            <p class="bundle-name">Scoglio</p>
+            <div class="bundle-size">
+              <select class="bundle-size-select" aria-label="Taglia Scoglio">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <div class="qty-stepper sm">
+                <button type="button" class="qty-btn" data-qty-decrement aria-label="Diminuisci quantità Scoglio">−</button>
+                <input type="number" class="qty-input bundle-qty" value="1" min="1" inputmode="numeric" aria-label="Quantità Scoglio">
+                <button type="button" class="qty-btn" data-qty-increment aria-label="Aumenta quantità Scoglio">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="bundle-price">€20</span>
+      </div>
+
+      <div class="bundle-row" data-bundle-row="levante">
+        <input type="checkbox" class="bundle-check" aria-label="Aggiungi Levante">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <a class="stamp" href="product-2.html" aria-label="Vai alla pagina Levante">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="20" r="14"/><path d="M20 6 L20 12 M34 20 L28 20 M20 34 L20 28 M6 20 L12 20" stroke-width="1.2"/></svg>
+          </a>
+          <div>
+            <p class="bundle-name">Levante</p>
+            <div class="bundle-size">
+              <select class="bundle-size-select" aria-label="Taglia Levante">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <div class="qty-stepper sm">
+                <button type="button" class="qty-btn" data-qty-decrement aria-label="Diminuisci quantità Levante">−</button>
+                <input type="number" class="qty-input bundle-qty" value="1" min="1" inputmode="numeric" aria-label="Quantità Levante">
+                <button type="button" class="qty-btn" data-qty-increment aria-label="Aumenta quantità Levante">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="bundle-price">€20</span>
+      </div>
+
+      <div class="bundle-row" data-bundle-row="cala">
+        <input type="checkbox" class="bundle-check" aria-label="Aggiungi Cala">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <a class="stamp" href="product-3.html" aria-label="Vai alla pagina Cala">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="20" cy="10" r="3" fill="currentColor" stroke="none"/><path d="M4 26 Q20 34 36 26"/></svg>
+          </a>
+          <div>
+            <p class="bundle-name">Cala</p>
+            <div class="bundle-size">
+              <select class="bundle-size-select" aria-label="Taglia Cala">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <div class="qty-stepper sm">
+                <button type="button" class="qty-btn" data-qty-decrement aria-label="Diminuisci quantità Cala">−</button>
+                <input type="number" class="qty-input bundle-qty" value="1" min="1" inputmode="numeric" aria-label="Quantità Cala">
+                <button type="button" class="qty-btn" data-qty-increment aria-label="Aumenta quantità Cala">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="bundle-price">€20</span>
+      </div>
+
+      <div class="bundle-row" data-bundle-row="riva">
+        <input type="checkbox" class="bundle-check" aria-label="Aggiungi Riva">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <a class="stamp" href="product-4.html" aria-label="Vai alla pagina Riva">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20 L36 20"/><circle cx="20" cy="20" r="4" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <div>
+            <p class="bundle-name">Riva</p>
+            <div class="bundle-size">
+              <select class="bundle-size-select" aria-label="Taglia Riva">
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <div class="qty-stepper sm">
+                <button type="button" class="qty-btn" data-qty-decrement aria-label="Diminuisci quantità Riva">−</button>
+                <input type="number" class="qty-input bundle-qty" value="1" min="1" inputmode="numeric" aria-label="Quantità Riva">
+                <button type="button" class="qty-btn" data-qty-increment aria-label="Aumenta quantità Riva">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="bundle-price">€20</span>
+      </div>
+
+    </div>
+
+    <aside class="summary-box">
+      <h3 style="margin-bottom:18px;">Riepilogo ordine</h3>
+
+      <p class="summary-empty" data-summary-empty>Seleziona almeno una maglietta per vedere il riepilogo.</p>
+
+      <div data-summary-body style="display:none;">
+        <div class="summary-row">
+          <span>Articoli</span>
+          <span data-summary-items>—</span>
+        </div>
+        <div class="summary-row">
+          <span>Spedizione</span>
+          <span data-summary-shipping>—</span>
+        </div>
+        <div class="summary-row total">
+          <span>Totale</span>
+          <span data-summary-total>—</span>
+        </div>
+        <p class="summary-note" data-summary-note></p>
+        <a href="#" class="btn btn-primary btn-block" data-checkout-btn disabled>Vai al pagamento</a>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span class="footer-logo">Accuzza</span>
+    <span class="footer-meta">© 2026 Accuzza — spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

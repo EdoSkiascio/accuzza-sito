@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grazie per il tuo ordine — Accuzza</title>
+<meta name="description" content="Grazie per il tuo ordine Accuzza. Ti spediamo in 4 giorni in tutta Italia.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="logo">Accuzza</a>
+  </div>
+</header>
+
+<section class="section" style="text-align:center; padding-top: 96px; padding-bottom: 96px;">
+  <div class="wrap" style="max-width: 560px;">
+    <p class="eyebrow" style="text-align:center;">Ordine confermato</p>
+    <h1 style="font-size: clamp(2rem, 6vw, 3rem); font-style: italic;">Grazie!</h1>
+    <p class="intro-body" style="max-width: 46ch; margin: 0 auto 32px;">
+      Il tuo ordine Accuzza è confermato. Riceverai a breve un'email di riepilogo da Stripe con tutti i dettagli del pagamento, e ti spediamo entro 4 giorni in tutta Italia.
+    </p>
+    <a href="index.html" class="btn btn-primary">Torna alla collezione</a>
+
+    <p id="order-ref" style="margin-top: 28px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink);"></p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span class="footer-logo">Accuzza</span>
+    <span class="footer-meta">© 2026 Accuzza — spedizioni in tutta Italia</span>
+  </div>
+</footer>
+
+<script>
+  // Mostra il riferimento della sessione Stripe come promemoria, se presente nell'URL.
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+  if (sessionId) {
+    document.getElementById("order-ref").textContent = "Riferimento ordine: " + sessionId;
+  }
+</script>
+</body>
+</html>
